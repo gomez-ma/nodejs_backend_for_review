@@ -3,7 +3,7 @@ const bcrypt = require('bcrypt');
 const mongoose = require('mongoose');
 const {Schema} = mongoose;
 
-const userSchem = new Schema({
+const userSchema = new Schema({
     email : {
         type: String,
         lowercase: true,
@@ -21,7 +21,7 @@ const userSchem = new Schema({
 },{timestamps:true});
 
 // ใช้ในขณะที่มีการบันทึกรหัสผ่าน
-userSchem.pre("save", async function(){
+userSchema.pre("save", async function(){
     var user = this;
     try {
         const salt = await bcrypt.genSalt(10);
@@ -32,3 +32,6 @@ userSchem.pre("save", async function(){
         throw error;
     }
 });
+
+const UserModel = db.model('user', userSchema);
+module.exports = UserModel;
